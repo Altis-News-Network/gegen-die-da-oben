@@ -1,0 +1,931 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gegen die da Oben — The Circle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.17.0/dist/tabler-icons.min.css" />
+
+<template id="__bundler_thumbnail" data-bg-color="#0F2A1D">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0F2A1D"/>
+    <circle cx="600" cy="400" r="180" fill="none" stroke="#9FC2AD" stroke-width="6"/>
+    <circle cx="600" cy="400" r="70" fill="#9FC2AD"/>
+    <text x="600" y="650" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="56" fill="#9FC2AD">The Circle</text>
+  </svg>
+</template>
+<style>
+  :root{
+    --bg:#FAFAF7;
+    --bg-alt:#F2F3EE;
+    --ink:#0F1A14;
+    --ink-soft:#3A463E;
+    --ink-mute:#6E7A72;
+    --line:#E2E3DD;
+    --green-deep:#0F2A1D;
+    --green:#23553B;
+    --green-mid:#3F6F4E;
+    --green-tint:#E7EEE7;
+    --warn:#C9541F;
+    --max:1280px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",ui-sans-serif,system-ui,sans-serif;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  body{overflow-x:hidden}
+  ::selection{background:var(--green);color:#fff}
+
+  .serif{font-family:"Instrument Serif",ui-serif,Georgia,serif;font-weight:400;letter-spacing:-0.01em}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+  .it{font-style:italic}
+
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 32px}
+  @media (max-width:720px){ .wrap{padding:0 22px} }
+
+  section{position:relative;padding:140px 0;border-top:1px solid var(--line)}
+  section:first-of-type{border-top:none}
+  @media (max-width:720px){ section{padding:96px 0} }
+
+  /* ----- top brand chip ----- */
+  .topbrand{
+    position:fixed;left:32px;top:28px;z-index:40;
+    display:flex;align-items:center;gap:10px;
+    font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);
+    mix-blend-mode:multiply;
+  }
+  .topbrand .mark{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--green-deep);position:relative}
+  .topbrand .mark::after{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--green-deep)}
+  @media (max-width:720px){ .topbrand{left:22px;top:20px;font-size:11px} }
+
+  .topmeta{
+    position:fixed;right:32px;top:28px;z-index:40;
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-mute);
+    display:flex;align-items:center;gap:14px;
+  }
+  .topmeta .dot{width:6px;height:6px;border-radius:50%;background:var(--green-mid);box-shadow:0 0 0 4px rgba(63,111,78,.18);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(63,111,78,.18)}50%{box-shadow:0 0 0 8px rgba(63,111,78,0)}}
+  @media (max-width:820px){ .topmeta{display:none} }
+
+  /* ----- dot nav ----- */
+  .dotnav{
+    position:fixed;right:30px;top:50%;transform:translateY(-50%) translateX(20px);
+    z-index:50;display:flex;flex-direction:column;gap:18px;align-items:flex-end;
+    opacity:0;pointer-events:none;transition:opacity .5s ease,transform .5s ease;
+  }
+  .dotnav.show{opacity:1;pointer-events:auto;transform:translateY(-50%) translateX(0)}
+  .dotnav a{
+    --d:8px;
+    display:flex;align-items:center;gap:14px;color:var(--ink-mute);text-decoration:none;
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  }
+  .dotnav a .lbl{opacity:0;transform:translateX(6px);transition:opacity .25s ease, transform .25s ease;white-space:nowrap}
+  .dotnav a:hover .lbl{opacity:1;transform:translateX(0)}
+  .dotnav a .pt{
+    width:var(--d);height:var(--d);border-radius:50%;background:transparent;border:1.5px solid currentColor;
+    transition:all .3s ease;opacity:.55;
+  }
+  .dotnav a:hover .pt{opacity:1}
+  .dotnav a.active .pt{background:currentColor;transform:scale(1.15);opacity:1}
+  .dotnav a.active{color:var(--green-deep)}
+  .dotnav a.active .lbl{opacity:1;transform:translateX(0)}
+
+  /* on dark green backgrounds invert nav for legibility */
+  .dotnav.on-dark a{color:#C7CFC9}
+  .dotnav.on-dark a.active{color:#fff}
+  .dotnav.on-dark a.active .pt{background:#fff;border-color:#fff}
+  @media (max-width:720px){ .dotnav{right:14px;gap:14px} .dotnav a .lbl{display:none} }
+
+  /* ----- buttons ----- */
+  .btn{
+    display:inline-flex;align-items:center;gap:12px;
+    padding:16px 24px;border-radius:999px;
+    background:var(--green-deep);color:#FAFAF7;text-decoration:none;
+    font-weight:500;font-size:15px;letter-spacing:.01em;
+    border:1px solid var(--green-deep);
+    transition:transform .25s ease, background .25s ease, gap .25s ease;
+    cursor:pointer;
+  }
+  .btn:hover{background:#0a2017;gap:16px}
+  .btn .i{transition:transform .25s ease}
+  .btn:hover .i{transform:translateX(2px)}
+  .btn.ghost{background:transparent;color:var(--green-deep);border-color:transparent;padding:14px 0}
+  .btn.ghost:hover{background:transparent}
+  .btn.ghost .arrow{
+    width:34px;height:34px;border-radius:50%;border:1.2px solid var(--green-deep);
+    display:inline-flex;align-items:center;justify-content:center;transition:transform .35s ease;
+  }
+  .btn.ghost:hover .arrow{transform:translateX(4px) rotate(-8deg)}
+  .btn.big{padding:22px 34px;font-size:17px}
+  .btn.outline{background:transparent;color:var(--green-deep)}
+
+  /* ----- shared kit ----- */
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);
+    font-weight:500;
+  }
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--green)}
+  .lede{font-size:21px;line-height:1.5;color:var(--ink-soft);max-width:60ch}
+  .hr-x{height:1px;width:100%;background:var(--line);margin:60px 0}
+
+  /* ----- HERO ----- */
+  .hero{padding:200px 0 160px;border-top:none;min-height:100svh;display:flex;align-items:center}
+  @media (max-width:720px){ .hero{padding:160px 0 110px;min-height:auto} }
+  .hero-grid{display:grid;grid-template-columns:1fr;gap:48px}
+  .hero h1{
+    margin:24px 0 0;
+    font-family:"Instrument Serif",serif;font-weight:400;
+    font-size:clamp(56px, 11vw, 168px);line-height:.95;letter-spacing:-0.025em;
+    color:var(--green-deep);
+  }
+  .hero h1 .it{font-style:italic;color:var(--green-mid)}
+  .hero .tag{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-mute)}
+  .hero-bottom{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-top:80px;flex-wrap:wrap}
+  .hero-slogan{max-width:48ch}
+  .hero-slogan p{font-size:22px;line-height:1.45;color:var(--ink);margin:0 0 22px;font-weight:400}
+  .hero-meta{
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-mute);
+    text-align:right;line-height:2;
+  }
+  .hero-meta strong{color:var(--ink);font-weight:500;display:block}
+  @media (max-width:720px){
+    .hero-meta{text-align:left}
+    .hero-bottom{margin-top:50px}
+  }
+
+  /* hero ambient mark */
+  .hero::before{
+    content:"";position:absolute;right:-60px;top:50%;transform:translateY(-50%);
+    width:520px;height:520px;border-radius:50%;
+    border:1px solid var(--green-tint);
+    pointer-events:none;
+  }
+  .hero::after{
+    content:"";position:absolute;right:60px;bottom:140px;
+    width:160px;height:160px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--green-tint), transparent 70%);
+    pointer-events:none;opacity:.7;
+  }
+  @media (max-width:980px){ .hero::before, .hero::after{display:none} }
+
+  /* ----- STATS ----- */
+  .stats{background:var(--green-deep);color:#F2F3EE;border-top:none}
+  .stats .eyebrow{color:#9FC2AD}
+  .stats .eyebrow::before{background:#9FC2AD}
+  .stats h2{
+    font-family:"Instrument Serif",serif;font-weight:400;
+    font-size:clamp(40px, 6.4vw, 84px);line-height:1.02;letter-spacing:-0.02em;
+    margin:24px 0 0;max-width:18ch;color:#fff;
+  }
+  .stats h2 .it{font-style:italic;color:#9FC2AD}
+  .stats .lede{color:#C7CFC9;margin-top:24px}
+  .stat-grid{
+    display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:0;margin-top:96px;
+    border-top:1px solid rgba(255,255,255,.12);
+  }
+  @media (max-width:980px){ .stat-grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:520px){ .stat-grid{grid-template-columns:1fr} }
+  .stat{
+    padding:40px 28px 36px;border-right:1px solid rgba(255,255,255,.12);
+    display:flex;flex-direction:column;gap:18px;min-height:300px;justify-content:space-between;
+    position:relative;min-width:0;
+  }
+  .stat > *{min-width:0}
+  .stat:last-child{border-right:none}
+  @media (max-width:980px){
+    .stat:nth-child(2n){border-right:none}
+    .stat:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.12)}
+  }
+  @media (max-width:520px){
+    .stat{border-right:none;border-bottom:1px solid rgba(255,255,255,.12)}
+    .stat:last-child{border-bottom:none}
+  }
+  .stat .icon{
+    width:42px;height:42px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+    border:1px solid rgba(255,255,255,.25);color:#9FC2AD;font-size:22px;
+  }
+  .stat .num{
+    font-family:"Instrument Serif",serif;font-weight:400;
+    font-size:clamp(52px, 5.6vw, 84px);line-height:.95;letter-spacing:-0.02em;color:#fff;
+    display:flex;flex-direction:column;align-items:flex-start;gap:8px;
+  }
+  .stat .num .figure{display:inline-flex;align-items:baseline;gap:2px}
+  .stat .num .unit{
+    font-size:12px;color:#9FC2AD;font-family:"DM Sans",sans-serif;
+    letter-spacing:.18em;text-transform:uppercase;font-style:normal;
+    line-height:1.3;
+  }
+  .stat .num .pre{font-size:.55em;color:#9FC2AD;margin-right:2px;font-family:"DM Sans",sans-serif;align-self:flex-start;line-height:1}
+  .stat .num .pct{font-family:"Instrument Serif",serif;color:#9FC2AD}
+  .stat .lbl{font-size:14px;line-height:1.45;color:#C7CFC9;max-width:24ch}
+  .stat .src{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(199,207,201,.55);margin-top:auto}
+
+  /* ----- PROBLEM ----- */
+  .problem-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:80px;align-items:start}
+  @media (max-width:900px){ .problem-grid{grid-template-columns:1fr;gap:48px} }
+  .problem h2{
+    font-family:"Instrument Serif",serif;font-weight:400;
+    font-size:clamp(42px,5.6vw,82px);line-height:1.02;letter-spacing:-0.02em;
+    margin:24px 0 28px;color:var(--green-deep);max-width:14ch;
+  }
+  .problem h2 .it{font-style:italic;color:var(--green-mid)}
+  .problem .col-text p{font-size:18px;line-height:1.65;color:var(--ink-soft);margin:0 0 18px;max-width:54ch}
+  .problem .col-text p.first{font-size:21px;color:var(--ink);line-height:1.55}
+
+  .factors{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+  .factor{padding:26px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:54px minmax(0,1fr) auto;gap:24px;align-items:start;cursor:default;transition:padding .3s ease}
+  .factor > *{min-width:0}
+  .factor:hover{padding-left:8px}
+  .factor .ic{width:42px;height:42px;border-radius:50%;background:var(--green-tint);color:var(--green-deep);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+  .factor h4{margin:0 0 6px;font-size:17px;font-weight:600;color:var(--ink)}
+  .factor p{margin:0;font-size:15px;color:var(--ink-mute);line-height:1.55;max-width:48ch}
+  .factor .pct{font-family:"Instrument Serif",serif;font-size:34px;color:var(--green-mid);line-height:1;align-self:center}
+
+  /* ----- VOICES ----- */
+  .voices{background:var(--bg-alt)}
+  .voices h2{
+    font-family:"Instrument Serif",serif;font-weight:400;
+    font-size:clamp(42px,5.6vw,82px);line-height:1.02;letter-spacing:-0.02em;
+    margin:24px 0 0;color:var(--green-deep);max-width:16ch;
+  }
+  .voices h2 .it{font-style:italic;color:var(--green-mid)}
+  .v-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:80px}
+  @media (max-width:980px){ .v-grid{grid-template-columns:1fr} }
+  .v-card{
+    background:#fff;border:1px solid var(--line);border-radius:6px;
+    padding:38px 34px 30px;display:flex;flex-direction:column;gap:24px;
+    transition:transform .35s ease, box-shadow .35s ease;
+    position:relative;overflow:hidden;
+  }
+  .v-card:hover{transform:translateY(-4px);box-shadow:0 24px 48px -28px rgba(15,42,29,.25)}
+  .v-card .quote-mark{
+    font-family:"Instrument Serif",serif;font-style:italic;color:var(--green-tint);
+    font-size:140px;line-height:.7;position:absolute;top:18px;right:18px;pointer-events:none;
+  }
+  .v-card blockquote{
+    margin:0;font-family:"Instrument Serif",serif;font-size:24px;line-height:1.35;
+    color:var(--ink);letter-spacing:-0.01em;position:relative;z-index:1;
+  }
+  .v-card .who{display:flex;align-items:center;gap:14px;margin-top:auto}
+  .v-card .avatar{
+    width:48px;height:48px;border-radius:50%;background:var(--green-tint);
+    display:flex;align-items:center;justify-content:center;color:var(--green-deep);
+    font-family:"Instrument Serif",serif;font-style:italic;font-size:22px;
+    border:1px solid var(--green-mid);
+  }
+  .v-card .meta{display:flex;flex-direction:column;line-height:1.25}
+  .v-card .meta .nm{font-weight:600;font-size:15px;color:var(--ink)}
+  .v-card .meta .rl{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute)}
+
+  /* ----- DEMANDS ----- */
+  .demands h2{
+    font-family:"Instrument Serif",serif;font-weight:400;
+    font-size:clamp(42px,5.6vw,82px);line-height:1.02;letter-spacing:-0.02em;
+    margin:24px 0 0;color:var(--green-deep);max-width:16ch;
+  }
+  .demands h2 .it{font-style:italic;color:var(--green-mid)}
+  .demands .lede{margin-top:24px}
+  .d-list{margin-top:80px;display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+  .d-item{
+    display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:40px;
+    padding:36px 0;border-bottom:1px solid var(--line);align-items:start;
+    transition:background .3s ease, padding .3s ease;
+  }
+  .d-item > *{min-width:0}
+  .d-item:hover{padding-left:16px;padding-right:16px;background:linear-gradient(to right, var(--green-tint), transparent 60%)}
+  .d-item .nr{
+    font-family:"Instrument Serif",serif;font-style:italic;color:var(--green-mid);
+    font-size:64px;line-height:.9;letter-spacing:-0.02em;
+  }
+  .d-item h3{
+    margin:6px 0 10px;font-family:"Instrument Serif",serif;font-weight:400;
+    font-size:32px;line-height:1.1;letter-spacing:-0.01em;color:var(--green-deep);
+  }
+  .d-item p{margin:0;color:var(--ink-soft);font-size:16px;line-height:1.55;max-width:52ch}
+  .d-item .tag{
+    align-self:start;justify-self:end;
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);
+    border:1px solid var(--green-mid);padding:8px 14px;border-radius:999px;white-space:nowrap;
+  }
+  @media (max-width:900px){
+    .d-item{grid-template-columns:80px 1fr;gap:24px}
+    .d-item .tag{grid-column:2;justify-self:start;margin-top:6px}
+  }
+
+  /* ----- JOIN ----- */
+  .join{background:var(--green-deep);color:#F2F3EE;text-align:center;padding:200px 0}
+  .join .eyebrow{color:#9FC2AD}
+  .join .eyebrow::before{background:#9FC2AD}
+  .join h2{
+    font-family:"Instrument Serif",serif;font-weight:400;
+    font-size:clamp(56px,9vw,140px);line-height:.98;letter-spacing:-0.025em;
+    margin:32px auto 28px;color:#fff;max-width:14ch;
+  }
+  .join h2 .it{font-style:italic;color:#9FC2AD}
+  .join p.lede{margin:0 auto;color:#C7CFC9;font-size:20px;max-width:54ch}
+  .join .actions{margin-top:56px;display:flex;gap:18px;justify-content:center;flex-wrap:wrap;align-items:center}
+  .join .btn{background:#FAFAF7;color:var(--green-deep);border-color:#FAFAF7}
+  .join .btn:hover{background:#fff}
+  .join .btn.outline{background:transparent;color:#FAFAF7;border-color:rgba(255,255,255,.35)}
+  .join .btn.outline:hover{background:rgba(255,255,255,.06)}
+  .join .counter{margin-top:64px;display:inline-flex;align-items:baseline;gap:14px;color:#9FC2AD;font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+  .join .counter .n{font-family:"Instrument Serif",serif;font-size:46px;color:#fff;letter-spacing:-0.01em;font-style:italic}
+
+  /* manifest form */
+  .manifest-form{
+    margin:48px auto 0;max-width:520px;display:none;flex-direction:column;gap:14px;text-align:left;
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);
+    padding:32px;border-radius:8px;
+  }
+  .manifest-form.open{display:flex}
+  .manifest-form .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:520px){ .manifest-form .row{grid-template-columns:1fr} }
+  .manifest-form label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9FC2AD;margin-bottom:6px;display:block}
+  .manifest-form input,.manifest-form select{
+    width:100%;padding:14px 16px;border-radius:4px;border:1px solid rgba(255,255,255,.18);
+    background:rgba(0,0,0,.18);color:#fff;font-family:inherit;font-size:15px;
+  }
+  .manifest-form input:focus,.manifest-form select:focus{outline:none;border-color:#9FC2AD}
+  .manifest-form select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#9FC2AD 50%),linear-gradient(135deg,#9FC2AD 50%,transparent 50%);background-position:calc(100% - 18px) center,calc(100% - 12px) center;background-size:6px 6px;background-repeat:no-repeat}
+  .manifest-form .submitrow{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:14px;flex-wrap:wrap}
+  .manifest-form .check{font-size:13px;color:#C7CFC9;display:flex;gap:10px;align-items:flex-start;line-height:1.4}
+  .manifest-form .check input{width:auto;margin-top:3px}
+  .manifest-success{display:none;flex-direction:column;align-items:center;gap:16px;margin-top:48px;color:#9FC2AD}
+  .manifest-success.show{display:flex}
+  .manifest-success .check-circ{
+    width:64px;height:64px;border-radius:50%;border:1.5px solid #9FC2AD;
+    display:flex;align-items:center;justify-content:center;font-size:30px;
+  }
+  .manifest-success h4{font-family:"Instrument Serif",serif;font-size:36px;color:#fff;margin:0;font-style:italic;font-weight:400}
+
+  /* ----- FOOTER ----- */
+  footer{background:#FAFAF7;border-top:1px solid var(--line);padding:90px 0 40px}
+  .f-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:56px}
+  @media (max-width:900px){ .f-grid{grid-template-columns:1fr 1fr;gap:40px} }
+  @media (max-width:520px){ .f-grid{grid-template-columns:1fr} }
+  .f-brand .lockup{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+  .f-brand .mk{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--green-deep);position:relative}
+  .f-brand .mk::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--green-deep)}
+  .f-brand h3{font-family:"Instrument Serif",serif;font-weight:400;font-size:30px;margin:0;color:var(--green-deep);letter-spacing:-0.01em}
+  .f-brand .cmp{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:14px}
+  .f-brand p{margin:0;color:var(--ink-mute);font-size:14px;line-height:1.6;max-width:38ch}
+  .f-col h5{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-mute);font-weight:500;margin:0 0 18px}
+  .f-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+  .f-col a{color:var(--ink);text-decoration:none;font-size:15px;display:inline-flex;align-items:center;gap:8px;transition:color .2s ease, gap .2s ease}
+  .f-col a:hover{color:var(--green);gap:12px}
+  .f-col p{margin:0;font-size:14px;color:var(--ink-soft);line-height:1.6}
+
+  .disclaimer{
+    margin-top:80px;padding:24px 28px;border:1px dashed var(--green-mid);
+    border-radius:6px;background:var(--green-tint);
+    display:flex;gap:18px;align-items:flex-start;
+  }
+  .disclaimer .ic{
+    width:36px;height:36px;border-radius:50%;background:var(--green-deep);color:#9FC2AD;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;
+  }
+  .disclaimer p{margin:0;font-size:14px;line-height:1.6;color:var(--green-deep)}
+  .disclaimer strong{display:block;margin-bottom:4px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--green)}
+
+  .f-base{
+    margin-top:48px;padding-top:28px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    font-size:12px;color:var(--ink-mute);letter-spacing:.06em;
+  }
+  .f-base a{color:var(--ink-mute);margin-right:18px;text-decoration:none}
+  .f-base a:hover{color:var(--ink)}
+
+  /* ----- reveal anim ----- */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:translateY(0)}
+  .reveal.d1{transition-delay:.08s}
+  .reveal.d2{transition-delay:.16s}
+  .reveal.d3{transition-delay:.24s}
+  .reveal.d4{transition-delay:.32s}
+
+  /* ----- modal: impressum / datenschutz ----- */
+  .modal{position:fixed;inset:0;background:rgba(15,26,20,.55);backdrop-filter:blur(6px);z-index:80;display:none;align-items:flex-end;justify-content:center;padding:0}
+  .modal.open{display:flex}
+  .modal .panel{
+    background:#FAFAF7;width:100%;max-width:780px;max-height:88vh;overflow-y:auto;
+    border-radius:14px 14px 0 0;padding:40px 44px 56px;position:relative;
+    animation:slideUp .35s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal .close{position:absolute;top:18px;right:18px;background:transparent;border:1px solid var(--line);width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink);font-size:18px}
+  .modal .close:hover{background:var(--line)}
+  .modal h3{font-family:"Instrument Serif",serif;font-weight:400;font-size:42px;letter-spacing:-0.01em;color:var(--green-deep);margin:0 0 8px}
+  .modal .sub{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:24px}
+  .modal h4{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);margin:28px 0 10px;font-weight:600}
+  .modal p{font-size:15px;line-height:1.65;color:var(--ink-soft);margin:0 0 14px}
+  .modal .fiktiv-note{
+    background:var(--green-tint);border-left:3px solid var(--green-deep);
+    padding:18px 22px;border-radius:0 6px 6px 0;margin:24px 0;color:var(--green-deep);
+  }
+</style>
+</head>
+<body>
+
+<!-- top -->
+<div class="topbrand">
+  <span class="mark"></span>
+  <span>The Circle</span>
+</div>
+<div class="topmeta">
+  <span class="dot"></span>
+  <span>Kampagne aktiv · Stand 05.2026</span>
+</div>
+
+<!-- dot nav -->
+<nav class="dotnav" id="dotnav" aria-label="Sektionen">
+  <a href="#hero" data-id="hero"><span class="lbl">Start</span><span class="pt"></span></a>
+  <a href="#stats" data-id="stats"><span class="lbl">Zahlen</span><span class="pt"></span></a>
+  <a href="#problem" data-id="problem"><span class="lbl">Problem</span><span class="pt"></span></a>
+  <a href="#voices" data-id="voices"><span class="lbl">Stimmen</span><span class="pt"></span></a>
+  <a href="#demands" data-id="demands"><span class="lbl">Forderungen</span><span class="pt"></span></a>
+  <a href="#join" data-id="join"><span class="lbl">Mitmachen</span><span class="pt"></span></a>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="tag reveal">Eine Initiative von The Circle · Altis 2026</div>
+      <h1 class="reveal d1">Gegen<br/>die da <span class="it">Oben.</span></h1>
+    </div>
+    <div class="hero-bottom">
+      <div class="hero-slogan reveal d2">
+        <p>Altis hat noch eine Chance — solange<br/>nicht jeder Hangar zur Startrampe wird.</p>
+        <a href="#stats" class="btn ghost">
+          <span>Erfahre mehr</span>
+          <span class="arrow"><i class="ti ti-arrow-down"></i></span>
+        </a>
+      </div>
+      <div class="hero-meta reveal d3">
+        <strong>Kampagne 03/26</strong>
+        <span>Kavala · Pyrgos · Sofia</span>
+        <span>Manifest Nr. 014</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats" class="stats">
+  <div class="wrap">
+    <div class="eyebrow reveal">Die Bilanz von oben</div>
+    <h2 class="reveal d1">Was über uns hinwegfliegt, <span class="it">bleibt unter uns liegen.</span></h2>
+    <p class="lede reveal d2">Daten aus 36 Monaten Beobachtung des zivilen und kommerziellen Luftverkehrs über Altis. Erhoben von Freiwilligen in Kavala, Athira und an der Südküste.</p>
+
+    <div class="stat-grid">
+      <div class="stat reveal">
+        <span class="icon"><i class="ti ti-helicopter"></i></span>
+        <div>
+          <div class="num">
+            <span class="figure"><span class="count" data-to="38">0</span></span>
+            <span class="unit">Tonnen CO₂ pro Flug</span>
+          </div>
+          <p class="lbl">Durchschnittlicher Ausstoß pro Cargo-Heli auf der Standardroute Kavala → Sofia.</p>
+        </div>
+        <span class="src">Quelle · TC-Messreihe 24/26</span>
+      </div>
+      <div class="stat reveal d1">
+        <span class="icon"><i class="ti ti-wave-square"></i></span>
+        <div>
+          <div class="num">
+            <span class="figure"><span class="count" data-to="17">0</span><span class="pct">%</span></span>
+            <span class="unit">Küste verseucht</span>
+          </div>
+          <p class="lbl">Treibstoffrückstände und Schwermetalle in den Sedimenten der Nordküste.</p>
+        </div>
+        <span class="src">Quelle · Hydro-Audit Altis</span>
+      </div>
+      <div class="stat reveal d2">
+        <span class="icon"><i class="ti ti-fish"></i></span>
+        <div>
+          <div class="num">
+            <span class="figure"><span class="pre">+</span><span class="count" data-to="200">0</span></span>
+            <span class="unit">Fischerei-Ausfälle</span>
+          </div>
+          <p class="lbl">Gemeldete Totalausfälle in Fanggebieten seit der erhöhten Überflugfrequenz 2022.</p>
+        </div>
+        <span class="src">Quelle · Hafenkooperative Pyrgos</span>
+      </div>
+      <div class="stat reveal d3">
+        <span class="icon"><i class="ti ti-volume"></i></span>
+        <div>
+          <div class="num">
+            <span class="figure"><span class="count" data-to="94">0</span><span class="unit" style="font-size:14px;letter-spacing:.06em;margin-left:6px;align-self:end;padding-bottom:.55em">dB</span></span>
+            <span class="unit">Dauerlärm in Wohngebieten</span>
+          </div>
+          <p class="lbl">Tagespegel unter dem Korridor. Empfehlung der WHO liegt bei 53 dB.</p>
+        </div>
+        <span class="src">Quelle · Bürgerinitiative Kavala</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem" class="problem">
+  <div class="wrap problem-grid">
+    <div class="col-text">
+      <div class="eyebrow reveal">Das Problem</div>
+      <h2 class="reveal d1">Ein Korridor aus Treibstoff, <span class="it">Abgas und Druck.</span></h2>
+      <p class="first reveal d2">Cargo-Helikopter und Jets prägen das Tagesbild über Altis weit mehr als jede zivile Aktivität auf dem Boden. Was als "logistische Notwendigkeit" verkauft wird, ist in Wahrheit ein dauerhafter ökologischer Eingriff.</p>
+      <p class="reveal d3">Jeder Start verbrennt Hunderte Liter Kerosin in wenigen Minuten. Die Abgaswolken legen sich als feine Schicht über Olivenhaine, Weiden und Trinkwasserquellen. Die Vibration und der Schalldruck der Rotoren verändern das Verhalten ganzer Tierpopulationen – Brutvögel verlassen ihre Nester, Fischschwärme meiden die Küstenzonen.</p>
+      <p class="reveal d3">Und die Menschen? Schlafen seit Jahren mit geschlossenen Fenstern.</p>
+    </div>
+
+    <div class="col-factors">
+      <div class="factors reveal d2">
+        <div class="factor">
+          <span class="ic"><i class="ti ti-droplet"></i></span>
+          <div><h4>Treibstoff-Spillover</h4><p>Restmengen aus Hot-Refueling und Tankleckagen versickern in Boden und Grundwasser.</p></div>
+          <span class="pct">42%</span>
+        </div>
+        <div class="factor">
+          <span class="ic"><i class="ti ti-cloud-fog"></i></span>
+          <div><h4>Abgasniederschlag</h4><p>Feinstaub und Stickoxide lagern sich kilometerweit entlang der Hauptflugkorridore ab.</p></div>
+          <span class="pct">×3.4</span>
+        </div>
+        <div class="factor">
+          <span class="ic"><i class="ti ti-ear"></i></span>
+          <div><h4>Dauerlärm</h4><p>Unter den Korridoren liegt der Tagespegel dauerhaft über dem WHO-Grenzwert für Wohngebiete.</p></div>
+          <span class="pct">94 dB</span>
+        </div>
+        <div class="factor">
+          <span class="ic"><i class="ti ti-paw"></i></span>
+          <div><h4>Wildtier-Verdrängung</h4><p>Bestände von Bienenfresser, Felsenadler und Mittelmeermöwe seit 2022 deutlich rückläufig.</p></div>
+          <span class="pct">−61%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VOICES -->
+<section id="voices" class="voices">
+  <div class="wrap">
+    <div class="eyebrow reveal">Stimmen der Bevölkerung</div>
+    <h2 class="reveal d1">Drei Berufe, ein Himmel, <span class="it">dieselbe Last.</span></h2>
+
+    <div class="v-grid">
+      <div class="v-card reveal">
+        <span class="quote-mark">„</span>
+        <blockquote>„Seit den Jets kommen die Sardinen nicht mehr in die Bucht. Mein Großvater hat hier sein Boot vertäut, ich werde der Letzte sein."</blockquote>
+        <div class="who">
+          <div class="avatar">N</div>
+          <div class="meta"><span class="nm">Nikos Pavlidis</span><span class="rl">Fischer · Hafen Pyrgos</span></div>
+        </div>
+      </div>
+      <div class="v-card reveal d1">
+        <span class="quote-mark">„</span>
+        <blockquote>„Auf meinen Oliven liegt Ruß. Im Sommer schmeckt das Öl bitter, im Winter regnet es schwarz. Niemand entschädigt uns dafür."</blockquote>
+        <div class="who">
+          <div class="avatar">M</div>
+          <div class="meta"><span class="nm">Maria Vorias</span><span class="rl">Bäuerin · Negades</span></div>
+        </div>
+      </div>
+      <div class="v-card reveal d2">
+        <span class="quote-mark">„</span>
+        <blockquote>„Jede Woche sitzen Kinder mit Atemwegsproblemen in meiner Praxis – alle aus der Nähe der Flugkorridore. Das sind keine Zahlen. Das sind Bewohner von Altis"</blockquote>
+        <div class="who">
+          <div class="avatar">D</div>
+          <div class="meta"><span class="nm">Dr. Eleni Sarafidis</span><span class="rl">Allgemeinärztin · Kavala</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMANDS -->
+<section id="demands" class="demands">
+  <div class="wrap">
+    <div class="eyebrow reveal">Unsere Forderungen</div>
+    <h2 class="reveal d1">Vier Punkte. Keiner davon <span class="it">
+verhandelbar.</span></h2>
+    <p class="lede reveal d2">Gerichtet an die Regierung von Altis, an alle bewaffneten Fraktionen und an die zivilen Cargo-Betreiber. Mit Frist bis zum 01.07.2026.</p>
+
+    <div class="d-list">
+      <div class="d-item reveal">
+        <span class="nr">01</span>
+        <div>
+          <h3>Flugverbotszonen über sensiblen Naturräumen</h3>
+          <p>Permanentes Tiefflugverbot über der Nordküste, dem Olivenhain-Korridor Negades–Athira und den Brutgebieten am Stratis-Plateau. Mindestflughöhe 600 m außerhalb militärischer Notlagen.</p>
+        </div>
+        <span class="tag">Sofortmaßnahme</span>
+      </div>
+      <div class="d-item reveal d1">
+        <span class="nr">02</span>
+        <div>
+          <h3>Umstellung auf emissionsarme Logistik</h3>
+          <p>Für 70 % aller zivilen Cargo-Strecken bis 2028 verbindlicher Ersatz durch Bodentransporte oder synthetische Treibstoffe. Vollständige Offenlegung der Flugbücher gegenüber einer unabhängigen Beobachterstelle.</p>
+        </div>
+        <span class="tag">ETAPPE 2026</span>
+      </div>
+      <div class="d-item reveal d2">
+        <span class="nr">03</span>
+        <div>
+          <h3>Strafen bei Verstößen — nicht symbolisch</h3>
+          <p>Empfindliche Bußgelder pro Verstoß, abgestuft nach Flughöhe, Zone und Wiederholung. Bei vorsätzlichem Tieftfliegen über Wohngebieten: Entzug der Betriebslizenz.</p>
+        </div>
+        <span class="tag">Verbindlich</span>
+      </div>
+      <div class="d-item reveal d3">
+        <span class="nr">04</span>
+        <div>
+          <h3>Transparenter Klimafonds aus Flugabgaben</h3>
+          <p>Eine Abgabe pro Flugstunde fließt zweckgebunden in Renaturierung, Küstensanierung und Entschädigung der Anwohner — verwaltet von einer Bürgerkommission, nicht von den Fraktionen selbst.</p>
+        </div>
+        <span class="tag">Bis 12/26</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join" class="join">
+  <div class="wrap">
+    <div class="eyebrow reveal">Mitmachen</div>
+    <h2 class="reveal d1">Unterzeichne. <br/><span class="it">Werde Teil der Bewegung.</span></h2>
+    <p class="lede reveal d2">Jede Unterschrift ist ein Druckpunkt. Wir übergeben das Manifest am 24.05.2026 öffentlich vor dem Regierungsgebäude in Kavala.</p>
+
+    <div class="actions reveal d3">
+      <button class="btn big" id="openManifest">
+        <span>Unterzeichne das Manifest</span>
+        <i class="ti ti-arrow-up-right i"></i>
+      </button>
+      <a href="#problem" class="btn big outline">
+        <span>Argumente lesen</span>
+      </a>
+    </div>
+
+    <form class="manifest-form" id="manifestForm" novalidate>
+      <div class="row">
+        <div><label>Vorname (RP)</label><input type="text" name="first" required placeholder="Andreas" /></div>
+        <div><label>Nachname (RP)</label><input type="text" name="last" required placeholder="Lentakis" /></div>
+      </div>
+      <div class="row">
+        <div><label>Ort</label><input type="text" name="city" required placeholder="Kavala" /></div>
+        <div><label>Rolle</label>
+          <select name="role" required>
+            <option value="">— wählen —</option>
+            <option>Bürger:in</option>
+            <option>Fischer:in</option>
+            <option>Landwirt:in</option>
+            <option>Mediziner:in</option>
+            <option>Aktivist:in</option>
+            <option>Andere</option>
+          </select>
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" required /> <span>Ich unterstütze die vier Forderungen und erkenne an, dass meine RP-Identität öffentlich auf der Manifest-Liste erscheinen darf.</span></label>
+      <div class="submitrow">
+        <span style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#9FC2AD">Anonymisiert · Nur RP-Daten</span>
+        <button type="submit" class="btn"><span>Jetzt unterzeichnen</span><i class="ti ti-feather i"></i></button>
+      </div>
+    </form>
+
+    <div class="manifest-success" id="manifestSuccess">
+      <div class="check-circ"><i class="ti ti-check"></i></div>
+      <h4>Danke. Deine Stimme zählt.</h4>
+      <p style="color:#C7CFC9;margin:0;font-size:15px;max-width:42ch;text-align:center">Du bist nun Teil des Kreises. Wir benachrichtigen dich vor der Übergabe am 01.09.2026.</p>
+    </div>
+
+    <div class="counter reveal d4">
+      <span>Bereits unterzeichnet</span>
+      <span class="n"><span class="count" data-to="2847">0</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div class="f-brand">
+        <div class="lockup">
+          <span class="mk"></span>
+          <h3>The Circle</h3>
+        </div>
+        <div class="cmp">Kampagne · Gegen die da Oben</div>
+        <p>Eine Bürgerbewegung für den Schutz von Boden, Wasser und Luft über der Insel Altis. Unabhängig, unbewaffnet, unbestechlich.</p>
+      </div>
+      <div class="f-col">
+        <h5>Adresse (RP)</h5>
+        <p>The Circle e.V.<br/>Odos Iraklia 12<br/>13310 Kavala<br/>Republik Altis</p>
+      </div>
+      <div class="f-col">
+        <h5>Kontakt</h5>
+        <ul>
+          <li><a href="#">kontakt@thecircle.alt</a></li>
+          <li><a href="#">presse@thecircle.alt</a></li>
+          <li><a href="#">Funk · 142.30 MHz</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h5>Rechtliches</h5>
+        <ul>
+          <li><a href="#" data-modal="impressum"><i class="ti ti-arrow-up-right" style="font-size:13px"></i> Impressum</a></li>
+          <li><a href="#" data-modal="datenschutz"><i class="ti ti-arrow-up-right" style="font-size:13px"></i> Datenschutz</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      <span class="ic"><i class="ti ti-device-gamepad-2"></i></span>
+      <p>
+        <strong>Fiktive Website · Arma 3 Roleplay</strong>
+        Dies ist eine fiktive Website, erstellt für Rollenspielzwecke im Rahmen von Arma 3. „The Circle", die Kampagne „Gegen die da Oben", sämtliche genannten Personen, Orte, Zahlen, Adressen und Funkfrequenzen sind frei erfunden. Es besteht kein Bezug zur Realität, zu real existierenden Organisationen, Behörden oder Personen.
+      </p>
+    </div>
+
+    <div class="f-base">
+      <div>© 2026 The Circle · Altis. Alle Rechte vorbehalten (im RP).</div>
+      <div>
+        <a href="#" data-modal="impressum">Impressum</a>
+        <a href="#" data-modal="datenschutz">Datenschutz</a>
+        <a href="#hero">Nach oben ↑</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="panel">
+    <button class="close" id="closeModal" aria-label="Schließen"><i class="ti ti-x"></i></button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<template id="tpl-impressum">
+  <div class="sub">Rechtliches · RP</div>
+  <h3>Impressum</h3>
+
+  <div class="fiktiv-note">
+    <strong style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:6px">Hinweis</strong>
+    Dies ist eine <strong>fiktive Website</strong>, erstellt ausschließlich für Rollenspielzwecke im Rahmen von <strong>Arma 3</strong>. Alle Inhalte, Organisationen, Personen, Adressen und Orte sind frei erfunden. Es besteht <strong>kein Bezug zur Realität</strong>.
+  </div>
+
+  <h4>Verantwortlich im RP</h4>
+  <p>The Circle e.V. (fiktiv)<br/>Odos Iraklia 12<br/>13310 Kavala · Republik Altis</p>
+
+  <h4>Vertretungsberechtigt im RP</h4>
+  <p>Sprecherrat „Gegen die da Oben"<br/>kontakt@thecircle.alt (nicht real)</p>
+
+  <h4>Eintragung im RP</h4>
+  <p>Vereinsregister Altis · VR 014-K<br/>USt-IdNr. (fiktiv): ALT 22 014 014</p>
+
+  <h4>Inhaltliche Verantwortung</h4>
+  <p>Die auf dieser Seite dargestellten Daten, Zitate und Statistiken sind <strong>frei erfunden</strong> und dienen ausschließlich der Atmosphäre des Arma-3-Rollenspiels. Keine der genannten Zahlen erhebt Anspruch auf wissenschaftliche Korrektheit.</p>
+
+  <h4>Bildnachweise</h4>
+  <p>Keine. Diese Seite verwendet keine realen Personen- oder Pressefotos.</p>
+</template>
+
+<template id="tpl-datenschutz">
+  <div class="sub">Rechtliches · RP</div>
+  <h3>Datenschutz</h3>
+
+  <div class="fiktiv-note">
+    <strong style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:6px">Hinweis</strong>
+    Diese Datenschutzerklärung ist Teil einer <strong>fiktiven Website für Arma-3-Rollenspielzwecke</strong>. Es werden in der Praxis <strong>keine personenbezogenen Daten</strong> auf einem Server verarbeitet. Sämtliche Formulareingaben verbleiben lokal im Browser.
+  </div>
+
+  <h4>1. Verarbeitete Daten (in der Fiktion)</h4>
+  <p>Im Rahmen des Rollenspiels werden lediglich RP-Daten erfasst: ein gewählter Vor- und Nachname, ein RP-Wohnort, eine RP-Rolle. Diese Daten dienen ausschließlich der atmosphärischen Darstellung einer Unterschriftensammlung.</p>
+
+  <h4>2. Cookies & Tracking</h4>
+  <p>Diese Seite setzt keine Cookies, kein Analytics, kein Tracking. Eingebundene Schriftarten werden über Google Fonts geladen.</p>
+
+  <h4>3. Deine Rechte</h4>
+  <p>Da keine echten personenbezogenen Daten verarbeitet werden, entfallen Auskunfts-, Berichtigungs- und Löschpflichten im rechtlichen Sinne. Im Rahmen des RP können RP-Unterschriften jederzeit auf Anfrage aus der Liste entfernt werden.</p>
+
+  <h4>4. Kontakt</h4>
+  <p>Anfragen bitte an den Sprecherrat „Gegen die da Oben" (RP-Adresse oben). Diese Adresse ist nicht real.</p>
+</template>
+
+<script>
+  // -------- dot nav reveal + active state --------
+  const nav = document.getElementById('dotnav');
+  const sections = ['hero','stats','problem','voices','demands','join'].map(id=>document.getElementById(id));
+
+  let lastY = 0;
+  function onScroll(){
+    const y = window.scrollY;
+    nav.classList.toggle('show', y > window.innerHeight * .35);
+    lastY = y;
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // Active section: pick the one whose top crosses an anchor line ~32% from viewport top.
+  // Robust for tall sections that never reach a high IntersectionObserver threshold.
+  const navLinks = [...document.querySelectorAll('#dotnav a')];
+  let rafId = null;
+  function updateActive(){
+    rafId = null;
+    const anchorY = window.innerHeight * 0.32;
+    let activeId = sections[0].id;
+    for(const s of sections){
+      const top = s.getBoundingClientRect().top;
+      if(top - anchorY <= 0) activeId = s.id;
+      else break;
+    }
+    // Near-bottom edge case: force last section as active
+    if(window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4){
+      activeId = sections[sections.length-1].id;
+    }
+    navLinks.forEach(a=>a.classList.toggle('active', a.dataset.id === activeId));
+    nav.classList.toggle('on-dark', activeId === 'stats' || activeId === 'join');
+  }
+  function scheduleActive(){
+    if(rafId !== null) return;
+    rafId = requestAnimationFrame(updateActive);
+  }
+  window.addEventListener('scroll', scheduleActive, {passive:true});
+  window.addEventListener('resize', scheduleActive);
+  updateActive();
+
+  // -------- reveal anim --------
+  const reveal = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        reveal.unobserve(e.target);
+      }
+    });
+  }, {threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>reveal.observe(el));
+
+  // -------- count up --------
+  const counted = new WeakSet();
+  const countIO = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting || counted.has(e.target)) return;
+      counted.add(e.target);
+      const el = e.target;
+      const to = +el.dataset.to;
+      const dur = 1500;
+      const start = performance.now();
+      function tick(t){
+        const p = Math.min(1, (t-start)/dur);
+        const eased = 1 - Math.pow(1-p, 3);
+        const v = Math.round(to * eased);
+        el.textContent = v.toLocaleString('de-DE');
+        if(p<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }, {threshold:.4});
+  document.querySelectorAll('.count').forEach(el=>countIO.observe(el));
+
+  // -------- manifest flow --------
+  const openBtn = document.getElementById('openManifest');
+  const form = document.getElementById('manifestForm');
+  const success = document.getElementById('manifestSuccess');
+  openBtn.addEventListener('click', ()=>{
+    form.classList.add('open');
+    form.scrollIntoView({behavior:'smooth', block:'center'});
+    setTimeout(()=>form.querySelector('input').focus(), 600);
+  });
+  form.addEventListener('submit', (ev)=>{
+    ev.preventDefault();
+    if(!form.checkValidity()){ form.reportValidity(); return; }
+    form.style.display='none';
+    success.classList.add('show');
+    // bump counter
+    const c = document.querySelector('.counter .count');
+    const cur = parseInt(c.textContent.replace(/\D/g,''))||0;
+    c.textContent = (cur+1).toLocaleString('de-DE');
+  });
+
+  // -------- modal --------
+  const modal = document.getElementById('modal');
+  const modalContent = document.getElementById('modalContent');
+  document.querySelectorAll('[data-modal]').forEach(a=>{
+    a.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const k = a.dataset.modal;
+      const tpl = document.getElementById('tpl-'+k);
+      if(!tpl) return;
+      modalContent.innerHTML = '';
+      modalContent.appendChild(tpl.content.cloneNode(true));
+      modal.classList.add('open');
+      document.body.style.overflow='hidden';
+    });
+  });
+  function closeM(){ modal.classList.remove('open'); document.body.style.overflow=''; }
+  document.getElementById('closeModal').addEventListener('click', closeM);
+  modal.addEventListener('click', (e)=>{ if(e.target===modal) closeM(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeM(); });
+</script>
+
+</body>
+</html>
