@@ -378,41 +378,41 @@
   .manifest-success h4{font-family:"Instrument Serif",serif;font-size:36px;color:#fff;margin:0;font-style:italic;font-weight:400}
 
   /* ----- FOOTER ----- */
-  footer{background:#FAFAF7;border-top:1px solid var(--line);padding:90px 0 40px}
+  footer{background:var(--green-deep);color:#C7CFC9;border-top:1px solid rgba(255,255,255,.06);padding:90px 0 40px}
   .f-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:56px}
   @media (max-width:900px){ .f-grid{grid-template-columns:1fr 1fr;gap:40px} }
   @media (max-width:520px){ .f-grid{grid-template-columns:1fr} }
   .f-brand .lockup{display:flex;align-items:center;gap:14px;margin-bottom:18px}
-  .f-brand .mk{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--green-deep);position:relative}
-  .f-brand .mk::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--green-deep)}
-  .f-brand h3{font-family:"Instrument Serif",serif;font-weight:400;font-size:30px;margin:0;color:var(--green-deep);letter-spacing:-0.01em}
-  .f-brand .cmp{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:14px}
-  .f-brand p{margin:0;color:var(--ink-mute);font-size:14px;line-height:1.6;max-width:38ch}
-  .f-col h5{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-mute);font-weight:500;margin:0 0 18px}
+  .f-brand .mk{width:44px;height:44px;border-radius:50%;border:1.5px solid #9FC2AD;position:relative}
+  .f-brand .mk::after{content:"";position:absolute;inset:9px;border-radius:50%;background:#9FC2AD}
+  .f-brand h3{font-family:"Instrument Serif",serif;font-weight:400;font-size:30px;margin:0;color:#fff;letter-spacing:-0.01em}
+  .f-brand .cmp{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#9FC2AD;margin-bottom:14px}
+  .f-brand p{margin:0;color:#9CA8A0;font-size:14px;line-height:1.6;max-width:38ch}
+  .f-col h5{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9FC2AD;font-weight:500;margin:0 0 18px}
   .f-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
-  .f-col a{color:var(--ink);text-decoration:none;font-size:15px;display:inline-flex;align-items:center;gap:8px;transition:color .2s ease, gap .2s ease}
-  .f-col a:hover{color:var(--green);gap:12px}
-  .f-col p{margin:0;font-size:14px;color:var(--ink-soft);line-height:1.6}
+  .f-col a{color:#E3E8E4;text-decoration:none;font-size:15px;display:inline-flex;align-items:center;gap:8px;transition:color .2s ease, gap .2s ease}
+  .f-col a:hover{color:#fff;gap:12px}
+  .f-col p{margin:0;font-size:14px;color:#9CA8A0;line-height:1.6}
 
   .disclaimer{
-    margin-top:80px;padding:24px 28px;border:1px dashed var(--green-mid);
-    border-radius:6px;background:var(--green-tint);
+    margin-top:80px;padding:24px 28px;border:1px dashed rgba(159,194,173,.45);
+    border-radius:6px;background:rgba(159,194,173,.08);
     display:flex;gap:18px;align-items:flex-start;
   }
   .disclaimer .ic{
-    width:36px;height:36px;border-radius:50%;background:var(--green-deep);color:#9FC2AD;
+    width:36px;height:36px;border-radius:50%;background:#9FC2AD;color:var(--green-deep);
     display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;
   }
-  .disclaimer p{margin:0;font-size:14px;line-height:1.6;color:var(--green-deep)}
-  .disclaimer strong{display:block;margin-bottom:4px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--green)}
+  .disclaimer p{margin:0;font-size:14px;line-height:1.6;color:#E3E8E4}
+  .disclaimer strong{display:block;margin-bottom:4px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#9FC2AD}
 
   .f-base{
-    margin-top:48px;padding-top:28px;border-top:1px solid var(--line);
+    margin-top:48px;padding-top:28px;border-top:1px solid rgba(255,255,255,.1);
     display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
-    font-size:12px;color:var(--ink-mute);letter-spacing:.06em;
+    font-size:12px;color:#7E8C84;letter-spacing:.06em;
   }
-  .f-base a{color:var(--ink-mute);margin-right:18px;text-decoration:none}
-  .f-base a:hover{color:var(--ink)}
+  .f-base a{color:#9CA8A0;margin-right:18px;text-decoration:none}
+  .f-base a:hover{color:#fff}
 
   /* ----- reveal anim ----- */
   .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1)}
@@ -461,9 +461,9 @@
   <a href="#stats" data-id="stats"><span class="lbl">Zahlen</span><span class="pt"></span></a>
   <a href="#problem" data-id="problem"><span class="lbl">Problem</span><span class="pt"></span></a>
   <a href="#voices" data-id="voices"><span class="lbl">Betroffene</span><span class="pt"></span></a>
-  <a href="#supporters" data-id="supporters"><span class="lbl">Befürworter</span><span class="pt"></span></a>
   <a href="#demands" data-id="demands"><span class="lbl">Forderungen</span><span class="pt"></span></a>
   <a href="#join" data-id="join"><span class="lbl">Mitmachen</span><span class="pt"></span></a>
+  <a href="#supporters" data-id="supporters"><span class="lbl">Unterzeichner</span><span class="pt"></span></a>
 </nav>
 
 <!-- HERO -->
@@ -619,44 +619,6 @@
   </div>
 </section>
 
-<!-- SUPPORTERS -->
-<section id="supporters" class="voices supporters">
-  <div class="wrap">
-    <div class="eyebrow reveal">Stimmen der Befürworter</div>
-    <h2 class="reveal d1">Wer den Himmel über Altis <span class="it">leiser haben will.</span></h2>
-
-    <div class="v-grid">
-      <div class="v-card reveal">
-        <span class="quote-mark">„</span>
-        <blockquote>„Unsere Sedimentproben aus der Bucht zeigen klare Treibstoff-Signaturen. Die Datenlage rechtfertigt eine sofortige Tiefflugbegrenzung — wissenschaftlich, nicht politisch.“</blockquote>
-        <div class="who">
-          <div class="avatar">K</div>
-          <div class="meta"><span class="nm">Dr. Katerina Voulgaris</span><span class="rl">Meeresbiologin · Stratis Forschungsstation</span></div>
-        </div>
-        <span class="endorse"><i class="ti ti-check"></i>Unterstützt</span>
-      </div>
-      <div class="v-card reveal d1">
-        <span class="quote-mark">„</span>
-        <blockquote>„Ich habe acht Jahre lang Cargo geflogen. Was wir routinemäßig über Wohngebieten gemacht haben, geht so nicht weiter. The Circle hat recht.“</blockquote>
-        <div class="who">
-          <div class="avatar">P</div>
-          <div class="meta"><span class="nm">Petros Manolakis</span><span class="rl">Ehem. Cargo-Pilot · Kavala</span></div>
-        </div>
-        <span class="endorse"><i class="ti ti-check"></i>Unterstützt</span>
-      </div>
-      <div class="v-card reveal d2">
-        <span class="quote-mark">„</span>
-        <blockquote>„Ist das Geil […] unterstütz ich.“</blockquote>
-        <div class="who">
-          <div class="avatar">G</div>
-          <div class="meta"><span class="nm">Günther Gunter</span><span class="rl">Polizist · Airfield</span></div>
-        </div>
-        <span class="endorse"><i class="ti ti-check"></i>Unterstützt</span>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- DEMANDS -->
 <section id="demands" class="demands">
   <div class="wrap">
@@ -754,6 +716,45 @@ verhandelbar.</span></h2>
     <div class="counter reveal d4">
       <span>Bereits unterzeichnet</span>
       <span class="n"><span class="count" data-to="2847">0</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORTERS — already-signed signatories, placed after Join -->
+<section id="supporters" class="voices supporters">
+  <div class="wrap">
+    <div class="eyebrow reveal">Bereits unterzeichnet</div>
+    <h2 class="reveal d1">Diese Personen haben das Manifest <span class="it">bereits unterschrieben.</span></h2>
+    <p class="lede reveal d2" style="margin-top:24px">Eine Auswahl der bisherigen Unterzeichner:innen — stellvertretend für 2.847 weitere Stimmen aus allen Teilen von Altis.</p>
+
+    <div class="v-grid">
+      <div class="v-card reveal">
+        <span class="quote-mark">„</span>
+        <blockquote>„Unsere Sedimentproben aus der Bucht zeigen klare Treibstoff-Signaturen. Die Datenlage rechtfertigt eine sofortige Tiefflugbegrenzung — wissenschaftlich, nicht politisch.“</blockquote>
+        <div class="who">
+          <div class="avatar">K</div>
+          <div class="meta"><span class="nm">Dr. Katerina Voulgaris</span><span class="rl">Meeresbiologin · Stratis Forschungsstation</span></div>
+        </div>
+        <span class="endorse"><i class="ti ti-check"></i>Unterzeichnet</span>
+      </div>
+      <div class="v-card reveal d1">
+        <span class="quote-mark">„</span>
+        <blockquote>„Ich habe acht Jahre lang Cargo geflogen. Was wir routinemäßig über Wohngebieten gemacht haben, geht so nicht weiter. The Circle hat recht.“</blockquote>
+        <div class="who">
+          <div class="avatar">P</div>
+          <div class="meta"><span class="nm">Petros Manolakis</span><span class="rl">Ehem. Cargo-Pilot · Kavala</span></div>
+        </div>
+        <span class="endorse"><i class="ti ti-check"></i>Unterzeichnet</span>
+      </div>
+      <div class="v-card reveal d2">
+        <span class="quote-mark">„</span>
+        <blockquote>„Ist das Geil […] unterstütz ich.“</blockquote>
+        <div class="who">
+          <div class="avatar">G</div>
+          <div class="meta"><span class="nm">Günther Gunter</span><span class="rl">Polizist · Airfield</span></div>
+        </div>
+        <span class="endorse"><i class="ti ti-check"></i>Unterzeichnet</span>
+      </div>
     </div>
   </div>
 </section>
@@ -868,7 +869,7 @@ verhandelbar.</span></h2>
 <script>
   // -------- dot nav reveal + active state --------
   const nav = document.getElementById('dotnav');
-  const sections = ['hero','stats','problem','voices','supporters','demands','join'].map(id=>document.getElementById(id));
+  const sections = ['hero','stats','problem','voices','demands','join','supporters'].map(id=>document.getElementById(id));
 
   let lastY = 0;
   function onScroll(){
