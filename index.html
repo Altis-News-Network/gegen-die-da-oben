@@ -272,7 +272,7 @@
   }
   .v-card .who{display:flex;align-items:center;gap:14px;margin-top:auto}
   .v-card .avatar{
-    width:48px;height:48px;border-radius:50%;background:var(--green-tint);
+    width:48px;height:48px;border-radius:50%;background:var(--green-tint);flex-shrink:0;
     display:flex;align-items:center;justify-content:center;color:var(--green-deep);
     font-family:"Instrument Serif",serif;font-style:italic;font-size:22px;
     border:1px solid var(--green-mid);
@@ -280,6 +280,19 @@
   .v-card .meta{display:flex;flex-direction:column;line-height:1.25}
   .v-card .meta .nm{font-weight:600;font-size:15px;color:var(--ink)}
   .v-card .meta .rl{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute)}
+
+  /* supporters variant — sits on warm white, badge on avatar */
+  .supporters{background:var(--bg)}
+  .supporters .v-card{position:relative;background:#FCFBF6;border-color:var(--green-tint);padding-top:56px}
+  .supporters .quote-mark{color:#EFEAD9}
+  .supporters .avatar{background:#fff;color:var(--green);border-color:var(--green)}
+  .supporters .endorse{
+    position:absolute;top:18px;left:18px;z-index:2;
+    background:var(--green);color:#fff;font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+    padding:5px 10px;border-radius:999px;font-weight:600;line-height:1;white-space:nowrap;
+    display:inline-flex;align-items:center;gap:5px;
+  }
+  .supporters .endorse i{font-size:11px}
 
   /* ----- DEMANDS ----- */
   .demands h2{
@@ -447,7 +460,8 @@
   <a href="#hero" data-id="hero"><span class="lbl">Start</span><span class="pt"></span></a>
   <a href="#stats" data-id="stats"><span class="lbl">Zahlen</span><span class="pt"></span></a>
   <a href="#problem" data-id="problem"><span class="lbl">Problem</span><span class="pt"></span></a>
-  <a href="#voices" data-id="voices"><span class="lbl">Stimmen</span><span class="pt"></span></a>
+  <a href="#voices" data-id="voices"><span class="lbl">Betroffene</span><span class="pt"></span></a>
+  <a href="#supporters" data-id="supporters"><span class="lbl">Befürworter</span><span class="pt"></span></a>
   <a href="#demands" data-id="demands"><span class="lbl">Forderungen</span><span class="pt"></span></a>
   <a href="#join" data-id="join"><span class="lbl">Mitmachen</span><span class="pt"></span></a>
 </nav>
@@ -573,16 +587,16 @@
 <!-- VOICES -->
 <section id="voices" class="voices">
   <div class="wrap">
-    <div class="eyebrow reveal">Stimmen der Bevölkerung</div>
+    <div class="eyebrow reveal">Stimmen der Betroffenen</div>
     <h2 class="reveal d1">Drei Berufe, ein Himmel, <span class="it">dieselbe Last.</span></h2>
 
     <div class="v-grid">
       <div class="v-card reveal">
         <span class="quote-mark">„</span>
-        <blockquote>„Ist das Geil [...] unterstütz ich."</blockquote>
+        <blockquote>„Seit den Jets kommen die Sardinen nicht mehr in die Bucht. Mein Großvater hat hier sein Boot vertäut, ich werde der Letzte sein.“</blockquote>
         <div class="who">
-          <div class="avatar">G</div>
-          <div class="meta"><span class="nm">Günther Gunter</span><span class="rl">Polizist · Airfield</span></div>
+          <div class="avatar">N</div>
+          <div class="meta"><span class="nm">Nikos Pavlidis</span><span class="rl">Fischer · Hafen Pyrgos</span></div>
         </div>
       </div>
       <div class="v-card reveal d1">
@@ -600,6 +614,44 @@
           <div class="avatar">D</div>
           <div class="meta"><span class="nm">Dr. Eleni Sarafidis</span><span class="rl">Allgemeinärztin · Kavala</span></div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORTERS -->
+<section id="supporters" class="voices supporters">
+  <div class="wrap">
+    <div class="eyebrow reveal">Stimmen der Befürworter</div>
+    <h2 class="reveal d1">Wer den Himmel über Altis <span class="it">leiser haben will.</span></h2>
+
+    <div class="v-grid">
+      <div class="v-card reveal">
+        <span class="quote-mark">„</span>
+        <blockquote>„Unsere Sedimentproben aus der Bucht zeigen klare Treibstoff-Signaturen. Die Datenlage rechtfertigt eine sofortige Tiefflugbegrenzung — wissenschaftlich, nicht politisch.“</blockquote>
+        <div class="who">
+          <div class="avatar">K</div>
+          <div class="meta"><span class="nm">Dr. Katerina Voulgaris</span><span class="rl">Meeresbiologin · Stratis Forschungsstation</span></div>
+        </div>
+        <span class="endorse"><i class="ti ti-check"></i>Unterstützt</span>
+      </div>
+      <div class="v-card reveal d1">
+        <span class="quote-mark">„</span>
+        <blockquote>„Ich habe acht Jahre lang Cargo geflogen. Was wir routinemäßig über Wohngebieten gemacht haben, geht so nicht weiter. The Circle hat recht.“</blockquote>
+        <div class="who">
+          <div class="avatar">P</div>
+          <div class="meta"><span class="nm">Petros Manolakis</span><span class="rl">Ehem. Cargo-Pilot · Kavala</span></div>
+        </div>
+        <span class="endorse"><i class="ti ti-check"></i>Unterstützt</span>
+      </div>
+      <div class="v-card reveal d2">
+        <span class="quote-mark">„</span>
+        <blockquote>„Ist das Geil […] unterstütz ich.“</blockquote>
+        <div class="who">
+          <div class="avatar">G</div>
+          <div class="meta"><span class="nm">Günther Gunter</span><span class="rl">Polizist · Airfield</span></div>
+        </div>
+        <span class="endorse"><i class="ti ti-check"></i>Unterstützt</span>
       </div>
     </div>
   </div>
@@ -816,7 +868,7 @@ verhandelbar.</span></h2>
 <script>
   // -------- dot nav reveal + active state --------
   const nav = document.getElementById('dotnav');
-  const sections = ['hero','stats','problem','voices','demands','join'].map(id=>document.getElementById(id));
+  const sections = ['hero','stats','problem','voices','supporters','demands','join'].map(id=>document.getElementById(id));
 
   let lastY = 0;
   function onScroll(){
